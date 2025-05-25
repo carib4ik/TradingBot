@@ -1,0 +1,80 @@
+using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
+using TradingBot.Data;
+using TradingBot.StateMachine;
+using TradingBot.StateMachine.States;
+
+namespace TradingBot;
+
+public class ChatStateController
+{
+    private readonly ChatStateMachine _stateMachine;
+
+    public ChatStateController(ChatStateMachine chatStateMachine)
+    {
+        _stateMachine = chatStateMachine;
+    }
+
+    public async Task HandleUpdateAsync(Update update)
+    {
+        if (update.Message == null && update.CallbackQuery == null)
+        {
+            return;
+        }
+
+        string? data;
+        Message message;
+        
+        switch (update.Type)
+        {
+            case UpdateType.Message:
+                data = update.Message.Text;
+                message = update.Message;
+                break;
+            
+            case UpdateType.CallbackQuery:
+                data = update.CallbackQuery.Data;
+                message = update.CallbackQuery.Message;
+                break;
+            
+            default:
+                return;
+        }
+        
+        var chatId = message.Chat.Id;
+        
+        Console.WriteLine($"Received message type: {message.Type}");
+        
+        switch (data)
+        {
+            case GlobalData.START:
+                await _stateMachine.TransitTo<StartState>(chatId);
+                break;
+            
+            case GlobalData.ASK:
+                await _stateMachine.TransitTo<AskState>(chatId);
+                break;
+            
+            case GlobalData.MARKET_DATA:
+                await _stateMachine.TransitTo<MarketDataState>(chatId);
+                break;
+            
+            case GlobalData.BTC:
+                await _stateMachine.TransitTo<GetTradeState>(chatId, GlobalData.BTC);
+                break;
+            
+            case GlobalData.ETH:
+                await _stateMachine.TransitTo<GetTradeState>(chatId, GlobalData.ETH);
+                break;
+            
+            case GlobalData.SOL:
+                await _stateMachine.TransitTo<GetTradeState>(chatId, GlobalData.SOL);
+                break;
+            
+            default:
+                var state = _stateMachine.GetState(chatId);
+                await state.HandleMessage(message);
+                break;
+        }
+    }
+}
