@@ -43,6 +43,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Bybit.Net": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
@@ -57,7 +61,7 @@
             },
             "Telegram.Bot": {
               "target": "Package",
-              "version": "[20.0.0, )"
+              "version": "[22.5.1, )"
             }
           },
           "imports": [

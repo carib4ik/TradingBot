@@ -2,6 +2,11 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using TradingBot.Services;
+using Bybit.Net;
+using Bybit.Net.Clients;
+using Bybit.Net.Enums;
+using Bybit.Net.Objects.Models.V5;
+using CryptoExchange.Net.Authentication;
 
 namespace TradingBot.StateMachine.States;
 
@@ -29,22 +34,40 @@ public class GetTradeState : ChatStateBase
     {
         Console.WriteLine("GetTradeState");
         
-        await _botClient.SendChatAction(chatId, ChatAction.Typing);
-        
-        // var chart4H = await _marketDataService.GenerateChart("BTCUSDT", "4h");
-        // var chart15M = await _marketDataService.GenerateChart("BTCUSDT", "15m");
-        // var chart1M = await _marketDataService.GenerateChart("BTCUSDT", "1m");
-        //
-        // var response = await _chatGptService.GetTradeFromChatGpt([chart15M, chart1M]);
+        var cancellationTokenSource = new CancellationTokenSource();
+        var typingTask = KeepTyping(chatId, cancellationTokenSource.Token);
 
-        var chart = await _marketDataService.GetData(currency, "3m");
-        var response = await _chatGptService.GetTradeFromChatGpt(chart);
-        
-        await _botClient.SendMessage(chatId, response);
-        // await using var stream = File.OpenRead(filePath);
-        // await _botClient.SendPhoto(chatId, photo: InputFile.FromStream(stream, Path.GetFileName(filePath)));
+        try
+        {
+            var chart = await _marketDataService.GetDataFromByBit(currency, "1h");
+            var response = await _chatGptService.GetTradeFromChatGpt(chart);
+            await _botClient.SendMessage(chatId, currency + "\n\n" + response, cancellationToken: cancellationTokenSource.Token);
 
-        
-        await _stateMachine.TransitTo<IdleState>(chatId);
+            // отправить график:
+            // var chart5m = await _marketDataService.GenerateChart(currency, "5m");
+            // await using var stream = File.OpenRead(chart5m);
+            // await _botClient.SendPhoto(chatId, InputFile.FromStream(stream, Path.GetFileName(chart5m)));
+        }
+        finally
+        {
+            await cancellationTokenSource.CancelAsync();
+            await _stateMachine.TransitTo<IdleState>(chatId);
+        }
+    }
+    
+    private async Task KeepTyping(long chatId, CancellationToken token)
+    {
+        try
+        {
+            while (!token.IsCancellationRequested)
+            {
+                await _botClient.SendChatAction(chatId, ChatAction.Typing, cancellationToken: token);
+                await Task.Delay(3000, token); // каждые 3 секунды
+            }
+        }
+        catch (TaskCanceledException)
+        {
+            // Ожидаемое завершение — ничего делать не нужно
+        }
     }
 }

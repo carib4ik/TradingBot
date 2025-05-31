@@ -24,6 +24,11 @@ public class StartState : ChatStateBase
     public override async Task OnEnter(long chatId)
     {
         Console.WriteLine("StartState");
+        
+        var result = await _botClient.GetMyCommands();
+        Console.WriteLine("Установленные команды:");
+        foreach (var cmd in result)
+            Console.WriteLine($"/{cmd.Command} — {cmd.Description}");
 
         await SendGreeting(chatId);
     }
@@ -37,7 +42,7 @@ public class StartState : ChatStateBase
         
         var keyboard = new InlineKeyboardMarkup([[askButton], [marketDataButton]]);
         
-        await _botClient.SendTextMessageAsync(chatId, greetings.EscapeMarkdownV2(), replyMarkup: keyboard, parseMode: ParseMode.MarkdownV2);
+        await _botClient.SendMessage(chatId, greetings.EscapeMarkdownV2(), replyMarkup: keyboard, parseMode: ParseMode.MarkdownV2);
         await _stateMachine.TransitTo<IdleState>(chatId);
     }
 }

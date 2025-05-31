@@ -71,6 +71,30 @@ public class ChatStateController
                 await _stateMachine.TransitTo<GetTradeState>(chatId, GlobalData.SOL);
                 break;
             
+            case GlobalData.ADA:
+                await _stateMachine.TransitTo<GetTradeState>(chatId, GlobalData.ADA);
+                break;
+            
+            case GlobalData.XRP:
+                await _stateMachine.TransitTo<GetTradeState>(chatId, GlobalData.XRP);
+                break;
+            
+            case GlobalData.LTC:
+                await _stateMachine.TransitTo<GetTradeState>(chatId, GlobalData.LTC);
+                break;
+            
+            case GlobalData.TON:
+                await _stateMachine.TransitTo<GetTradeState>(chatId, GlobalData.TON);
+                break;
+            
+            case GlobalData.SUI:
+                await _stateMachine.TransitTo<GetTradeState>(chatId, GlobalData.SUI);
+                break;
+            
+            case GlobalData.AVAX:
+                await _stateMachine.TransitTo<GetTradeState>(chatId, GlobalData.AVAX);
+                break;
+            
             default:
                 var state = _stateMachine.GetState(chatId);
                 await state.HandleMessage(message);

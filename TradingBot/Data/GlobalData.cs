@@ -5,12 +5,14 @@ public class GlobalData
     public const string START = "/start";
     public const string ASK = "Задать вопрос ChatGPT";
     public const string MARKET_DATA = "Получить точку входа";
+    
     public const string BTC = "BTCUSDT";
     public const string ETH = "ETHUSDT";
     public const string SOL = "SOLUSDT";
-}
-
-enum Currecy
-{
-    BTC, ETH, SOL, LTC, ADA, XRP
+    public const string ADA = "ADAUSDT";
+    public const string TON = "TONUSDT";
+    public const string XRP = "XRPUSDT";
+    public const string LTC = "LTCUSDT";
+    public const string AVAX = "AVAXUSDT";
+    public const string SUI = "SUIUSDT";
 }

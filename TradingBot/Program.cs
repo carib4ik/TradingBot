@@ -20,6 +20,5 @@ public static class Program
         
         telegramBot.StartBot();
         await Task.Delay(Timeout.Infinite);
-
     }
 }

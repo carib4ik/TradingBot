@@ -36,11 +36,21 @@ public class TelegramBotController
 
     private async Task CreateCommandsKeyboard()
     {
-        await _botClient.DeleteMyCommandsAsync();
+        await _botClient.DeleteMyCommands();
 
-        var commands = new[] { new BotCommand { Command = GlobalData.START, Description = "Запустить бота" } };
-
-        await _botClient.SetMyCommandsAsync(commands);
+        var commands = new[]
+        {
+            new BotCommand { Command = GlobalData.START, Description = "Запустить бота" },
+            // new BotCommand { Command = GlobalData.MARKET_DATA, Description = "Получить точку входа" }
+        };
+        
+        await _botClient.SetMyCommands(
+            commands,
+            scope: new BotCommandScopeDefault(),
+            languageCode: "ru"
+        );
+        
+        // await _botClient.SetMyCommands(commands);
     }
     
     private Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception,
@@ -94,7 +104,7 @@ public class TelegramBotController
     {
         try
         {
-            await _botClient.DeleteMessageAsync(chatId, messageId, cancellationToken: cancellationToken);
+            await _botClient.DeleteMessage(chatId, messageId, cancellationToken: cancellationToken);
         }
         catch (ApiRequestException exception)
         {

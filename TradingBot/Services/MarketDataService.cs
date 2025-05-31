@@ -1,14 +1,28 @@
 using System.Globalization;
+using Bybit.Net.Clients;
+using Bybit.Net.Enums;
+using CryptoExchange.Net.Authentication;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ScottPlot;
+using TradingBot.Extensions;
 
 namespace TradingBot.Services;
 
 public class MarketDataService
 {
-    private const int CandlesLimit = 600;
+    private readonly BybitRestClient _bybitClient;
+    private const int CandlesLimit = 800;
+
+    public MarketDataService()
+    {
+        _bybitClient = new BybitRestClient(options =>
+        {
+            options.ApiCredentials = new ApiCredentials("bd0fMchW947xG6aALf", "Xr43zTrn3jKPCHVdn45lqKXprFOIDes7HS7Z");
+        });
+    }
     
-    public async Task<string> GetData(string symbol, string interval)
+    public async Task<string> GetDataFromBinance(string symbol, string interval)
     {
         var url = $"https://api.binance.com/api/v3/klines?symbol={symbol}&interval={interval}&limit={CandlesLimit}";
 
@@ -22,10 +36,32 @@ public class MarketDataService
 
         return await response.Content.ReadAsStringAsync();
     }
+
+    public async Task<string> GetDataFromByBit(string symbol, string interval)
+    {
+        
+            
+        var chart = await _bybitClient.V5Api.ExchangeData.GetKlinesAsync(
+            category: Category.Spot,         // Spot или Linear/Inverse для деривативов
+            symbol: symbol,
+            interval: interval.ToKlineInterval(),
+            limit: CandlesLimit
+        );
+        
+        var jsonChart = JsonConvert.SerializeObject(chart.Data.List.Select(c => new {
+            Time = c.StartTime.ToString("s"),
+            Open = c.OpenPrice,
+            High = c.HighPrice,
+            Low = c.LowPrice,
+            Close = c.ClosePrice
+        }), Formatting.Indented);
+        
+        return jsonChart;
+    }
     
     public async Task<string> GenerateChart(string symbol, string interval)
     {
-        var json = await GetData(symbol, interval);
+        var json = await GetDataFromByBit(symbol, interval);
         var candles = JArray.Parse(json);
 
         int count = candles.Count;
@@ -36,13 +72,12 @@ public class MarketDataService
         for (int i = 0; i < count; i++)
         {
             var c = candles[i];
-            long unixTime = (long)c[0];
-            double open = double.Parse((string)c[1], CultureInfo.InvariantCulture);
-            double high = double.Parse((string)c[2], CultureInfo.InvariantCulture);
-            double low = double.Parse((string)c[3], CultureInfo.InvariantCulture);
-            double close = double.Parse((string)c[4], CultureInfo.InvariantCulture);
+            DateTime time = DateTime.Parse(c["Time"]!.ToString(), null, DateTimeStyles.RoundtripKind);
+            double open = (double)c["Open"]!;
+            double high = (double)c["High"]!;
+            double low = (double)c["Low"]!;
+            double close = (double)c["Close"]!;
 
-            DateTime time = DateTimeOffset.FromUnixTimeMilliseconds(unixTime).DateTime;
             ohlcs[i] = new OHLC(open, high, low, close, time, candleSpan);
         }
 
