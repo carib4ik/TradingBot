@@ -60,3 +60,4 @@ C:\Users\carib\RiderProjects\TradingBot\TradingBot\bin\Debug\net8.0\System.Text.
 C:\Users\carib\RiderProjects\TradingBot\TradingBot\bin\Debug\net8.0\System.Text.Json.dll
 C:\Users\carib\RiderProjects\TradingBot\TradingBot\bin\Debug\net8.0\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll
 C:\Users\carib\RiderProjects\TradingBot\TradingBot\obj\Debug\net8.0\TradingBot.sourcelink.json
+C:\Users\carib\RiderProjects\TradingBot\TradingBot\bin\Debug\net8.0\AppSettings\config.json

@@ -14,11 +14,11 @@ public class MarketDataService
     private readonly BybitRestClient _bybitClient;
     private const int CandlesLimit = 800;
 
-    public MarketDataService()
+    public MarketDataService(string apiKey, string apiSecret)
     {
         _bybitClient = new BybitRestClient(options =>
         {
-            options.ApiCredentials = new ApiCredentials("bd0fMchW947xG6aALf", "Xr43zTrn3jKPCHVdn45lqKXprFOIDes7HS7Z");
+            options.ApiCredentials = new ApiCredentials(apiKey, apiSecret);
         });
     }
     

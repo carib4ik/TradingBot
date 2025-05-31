@@ -2,11 +2,6 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using TradingBot.Services;
-using Bybit.Net;
-using Bybit.Net.Clients;
-using Bybit.Net.Enums;
-using Bybit.Net.Objects.Models.V5;
-using CryptoExchange.Net.Authentication;
 
 namespace TradingBot.StateMachine.States;
 
