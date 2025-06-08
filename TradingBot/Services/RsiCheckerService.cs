@@ -78,7 +78,6 @@ public class RsiCheckerService : BackgroundService
             new TokenData { Symbol = GlobalData.SUI },
             new TokenData { Symbol = GlobalData.XRP },
             new TokenData { Symbol = GlobalData.NEAR },
-            new TokenData { Symbol = GlobalData.HYPE },
             new TokenData { Symbol = GlobalData.INJ },
             new TokenData { Symbol = GlobalData.AAVE },
         ];
