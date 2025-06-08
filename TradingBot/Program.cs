@@ -12,21 +12,7 @@ public static class Program
 {
     public static async Task Main(string[] args)
     {
-        var config = LoadConfig("AppSettings/Config.json");
-        
-        // var botClient = new TelegramBotClient(config.TelegramBotToken);
-        //
-        // var usersDataProvider = new UsersDataProvider();
-        // var marketDataService = new MarketDataService(config.BybitKey, config.BybitSecret);
-        // var rsiCheckerService = new RsiCheckerService(botClient, marketDataService);
-        // var chatGptService = new ChatGptService(config.OpenAiKey);
-        //
-        // var chatStateMachine = new ChatStateMachine(botClient, usersDataProvider, chatGptService, marketDataService);
-        // var chatStateController = new ChatStateController(chatStateMachine);
-        // var telegramBot = new TelegramBotController(botClient, chatStateController);
-        //
-        // telegramBot.StartBot();
-        // await Task.Delay(Timeout.Infinite);
+        var config = LoadConfig();
         
         var host = Host.CreateDefaultBuilder(args)
             .ConfigureServices((context, services) =>
@@ -60,12 +46,14 @@ public static class Program
         await host.RunAsync();
     }
     
-    private static AppConfig? LoadConfig(string filePath)
+    private static AppConfig LoadConfig()
     {
-        if (!File.Exists(filePath))
-            throw new FileNotFoundException($"Файл конфигурации не найден: {filePath}");
-
-        var json = File.ReadAllText(filePath);
-        return JsonConvert.DeserializeObject<AppConfig>(json);
+        return new AppConfig
+        {
+            TelegramBotToken = Environment.GetEnvironmentVariable("TELEGRAM_BOT_TOKEN"),
+            BybitKey = Environment.GetEnvironmentVariable("BYBIT_KEY"),
+            BybitSecret = Environment.GetEnvironmentVariable("BYBIT_SECRET"),
+            OpenAiKey = Environment.GetEnvironmentVariable("OPEN_AI_KEY"),
+        };
     }
 }
