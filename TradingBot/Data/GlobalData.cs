@@ -17,4 +17,8 @@ public class GlobalData
     public const string LTC = "LTCUSDT";
     public const string AVAX = "AVAXUSDT";
     public const string SUI = "SUIUSDT";
+    public const string INJ = "INJUSDT";
+    public const string NEAR = "NEARUSDT";
+    public const string AAVE = "AAVEUSDT";
+    public const string HYPE = "HYPEUSDT";
 }

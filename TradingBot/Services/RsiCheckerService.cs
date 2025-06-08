@@ -8,7 +8,7 @@ public class RsiCheckerService : BackgroundService
 {
     private readonly ITelegramBotClient _botClient;
     private readonly MarketDataService _marketDataService;
-    private readonly TimeSpan _checkingInterval = TimeSpan.FromMinutes(1);
+    private readonly TimeSpan _checkingInterval = TimeSpan.FromMinutes(20);
     private readonly UsersDataProvider _usersDataProvider;
     private const string ChartInterval = "1h";
     private const double MaxRsiAlert = 70;
@@ -76,7 +76,11 @@ public class RsiCheckerService : BackgroundService
             new TokenData { Symbol = GlobalData.LTC },
             new TokenData { Symbol = GlobalData.TON },
             new TokenData { Symbol = GlobalData.SUI },
-            new TokenData { Symbol = GlobalData.XRP }
+            new TokenData { Symbol = GlobalData.XRP },
+            new TokenData { Symbol = GlobalData.NEAR },
+            new TokenData { Symbol = GlobalData.HYPE },
+            new TokenData { Symbol = GlobalData.INJ },
+            new TokenData { Symbol = GlobalData.AAVE },
         ];
     }
 }
