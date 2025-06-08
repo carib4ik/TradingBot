@@ -47,6 +47,10 @@
               "target": "Package",
               "version": "[5.0.0, )"
             },
+            "Microsoft.Extensions.Hosting": {
+              "target": "Package",
+              "version": "[9.0.5, )"
+            },
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
@@ -58,6 +62,10 @@
             "ScottPlot": {
               "target": "Package",
               "version": "[5.0.55, )"
+            },
+            "Skender.Stock.Indicators": {
+              "target": "Package",
+              "version": "[2.6.1, )"
             },
             "Telegram.Bot": {
               "target": "Package",

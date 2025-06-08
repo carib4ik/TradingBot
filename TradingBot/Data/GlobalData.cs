@@ -3,8 +3,10 @@ namespace TradingBot.Data;
 public class GlobalData
 {
     public const string START = "/start";
-    public const string ASK = "Задать вопрос ChatGPT";
-    public const string MARKET_DATA = "Получить точку входа";
+    public const string ASK = "AskAI";
+    public const string MARKET_DATA = "GetTrade";
+    public const string POSITIONS = "GetPositions";
+    public const string RSI = "RSI";
     
     public const string BTC = "BTCUSDT";
     public const string ETH = "ETHUSDT";

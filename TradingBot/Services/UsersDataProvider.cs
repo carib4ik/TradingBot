@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using Newtonsoft.Json;
 using TradingBot.Data;
 
 namespace TradingBot.Services;
@@ -6,26 +7,28 @@ namespace TradingBot.Services;
 public class UsersDataProvider
 {
     private readonly ConcurrentDictionary<long, UserData> _usersData = new();
+    private const string FilePath = "AppSettings/Users.json";
     
-    public void SetTelegramName(long chatId, string? telegramName)
+    public void SaveChatIdIfNotExists(long chatId)
     {
-        var userState = _usersData.GetOrAdd(chatId, new UserData());
-        userState.TelegramName = telegramName;
+        var chatIds = LoadChatIds();
+        
+        if (!chatIds.Contains(chatId))
+        {
+            chatIds.Add(chatId);
+            File.WriteAllText(FilePath, JsonConvert.SerializeObject(chatIds, Formatting.Indented));
+        }
     }
     
-    public UserData GetUserData(long chatId)
+    public List<long> LoadChatIds()
     {
-        return _usersData[chatId];
-    }
-
-    public void ClearUserData(long chatId)
-    {
-        _usersData.TryRemove(chatId, out _);
-    }
-
-    public void SaveLastQuestion(long chatId, string? question)
-    {
-        var userState = _usersData.GetOrAdd(chatId, new UserData());
-        userState.LastQuestion = question;
+        if (!File.Exists(FilePath))
+        {
+            return new List<long>();
+        }
+        
+        var json = File.ReadAllText(FilePath);
+        
+        return JsonConvert.DeserializeObject<List<long>>(json) ?? new List<long>();
     }
 }

@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ScottPlot;
 using TradingBot.Extensions;
+using Skender.Stock.Indicators;
 
 namespace TradingBot.Services;
 
@@ -58,6 +59,48 @@ public class MarketDataService
         
         return jsonChart;
     }
+    
+    public async Task<double?> GetCurrentRsi(string symbol, string interval, int period = 14)
+    {
+        var json = await GetDataFromByBit(symbol, interval);
+        var candles = JArray.Parse(json);
+
+        var quotes = candles.Select(c => new Quote
+        {
+            Date = DateTime.Parse(c["Time"]!.ToString(), null, DateTimeStyles.RoundtripKind),
+            Open = Convert.ToDecimal(c["Open"]!),
+            High = Convert.ToDecimal(c["High"]!),
+            Low = Convert.ToDecimal(c["Low"]!),
+            Close = Convert.ToDecimal(c["Close"]!),
+            Volume = 0 // если объём не нужен, можно оставить 0
+        }).ToList();
+
+        var rsiResults = quotes.GetRsi(period);
+        return rsiResults.LastOrDefault()?.Rsi;
+    }
+    
+    public async Task<string> GetOpenPositionsAsync()
+    {
+        var result = await _bybitClient.V5Api.Trading.GetPositionsAsync(category: Category.Linear, settleAsset: "USDT");
+
+        if (!result.Success || result.Data == null)
+            return "Ошибка при получении позиций с Bybit.";
+
+        var positions = result.Data.List
+            .Where(p => p.PositionValue > 0) // Фильтруем только активные позиции
+            .Select(p => new
+            {
+                p.Symbol,
+                Size = p.PositionValue,
+                EntryPrice = p.AveragePrice,
+                Pnl = p.UnrealizedPnl,
+                Leverage = p.Leverage,
+                Side = p.Side.ToString()
+            });
+
+        return JsonConvert.SerializeObject(positions, Formatting.Indented);
+    }
+
     
     public async Task<string> GenerateChart(string symbol, string interval)
     {

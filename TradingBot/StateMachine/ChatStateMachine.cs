@@ -12,11 +12,13 @@ public class ChatStateMachine
     
     public ChatStateMachine(ITelegramBotClient botClient, UsersDataProvider usersDataProvider, ChatGptService chatGptService, MarketDataService marketDataState)
     {
-        _states[typeof(IdleState)] = () => new IdleState(this, usersDataProvider);
+        _states[typeof(IdleState)] = () => new IdleState(this);
         _states[typeof(StartState)] = () => new StartState(this, botClient);
         _states[typeof(AskState)] = () => new AskState(this, botClient, chatGptService);
         _states[typeof(MarketDataState)] = () => new MarketDataState(this, botClient);
         _states[typeof(GetTradeState)] = () => new GetTradeState(this, botClient, marketDataState, chatGptService);
+        _states[typeof(TrackPositionsState)] = () => new TrackPositionsState(this, botClient, marketDataState);
+        _states[typeof(RsiState)] = () => new RsiState(this, botClient, marketDataState);
     }
     
     public ChatStateBase GetState(long chatId)

@@ -4,6 +4,7 @@ using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using TradingBot.Data;
+using TradingBot.Services;
 
 namespace TradingBot;
 
@@ -11,11 +12,13 @@ public class TelegramBotController
 {
     private readonly ITelegramBotClient _botClient;
     private readonly ChatStateController _chatStateController;
+    private UsersDataProvider _usersDataProvider;
 
-    public TelegramBotController(ITelegramBotClient telegramBotClient, ChatStateController chatStateController)
+    public TelegramBotController(ITelegramBotClient telegramBotClient, ChatStateController chatStateController, UsersDataProvider usersDataProvider)
     {
         _botClient = telegramBotClient;
         _chatStateController = chatStateController;
+        _usersDataProvider = usersDataProvider;
     }
 
     public void StartBot()
@@ -87,13 +90,15 @@ public class TelegramBotController
         var userId = message != null ? message.From.Id : callbackQuery.From.Id;
         var messageId = message != null ? message.MessageId : callbackQuery.Message.MessageId;
         var messageText = message != null ? message.Text : callbackQuery?.Data;
-        // var chatId = message?.Chat.Id;
+        var chatId = message != null ? message.Chat.Id : callbackQuery.Message.Chat.Id;
         
-        // string response;
 
         if (messageText == GlobalData.START)
         {
             await DeleteMessageAsync(userId, messageId, cancellationToken);
+            
+            // Сохраняем chatId, если его ещё нет
+            _usersDataProvider.SaveChatIdIfNotExists(chatId);
         }
         
         await _chatStateController.HandleUpdateAsync(update);

@@ -43,8 +43,6 @@ public class ChatStateController
         
         var chatId = message.Chat.Id;
         
-        Console.WriteLine($"Received message type: {message.Type}");
-        
         switch (data)
         {
             case GlobalData.START:
@@ -57,6 +55,14 @@ public class ChatStateController
             
             case GlobalData.MARKET_DATA:
                 await _stateMachine.TransitTo<MarketDataState>(chatId);
+                break;
+            
+            case GlobalData.POSITIONS:
+                await _stateMachine.TransitTo<TrackPositionsState>(chatId);
+                break;
+            
+            case GlobalData.RSI:
+                await _stateMachine.TransitTo<RsiState>(chatId);
                 break;
             
             case GlobalData.BTC:
