@@ -80,6 +80,7 @@ public class RsiCheckerService : BackgroundService
             new TokenData { Symbol = GlobalData.NEAR },
             new TokenData { Symbol = GlobalData.INJ },
             new TokenData { Symbol = GlobalData.AAVE },
+            new TokenData { Symbol = GlobalData.LINK },
         ];
     }
 }

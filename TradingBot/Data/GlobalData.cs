@@ -20,5 +20,5 @@ public class GlobalData
     public const string INJ = "INJUSDT";
     public const string NEAR = "NEARUSDT";
     public const string AAVE = "AAVEUSDT";
-    public const string HYPE = "HYPEUSDT";
+    public const string LINK = "LINKUSDT";
 }
