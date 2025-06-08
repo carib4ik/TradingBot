@@ -1,11 +1,38 @@
+# === Build output ===
 bin/
 obj/
 
+# === App settings / Secrets ===
 AppSettings/config.json
 
+# === IDE settings ===
 .idea/
 .vscode/
 *.user
 *.suo
 
+# === Logs ===
 *.log
+
+# === Rider / JetBrains-specific ===
+*.DotSettings.user
+
+# === VS / MSBuild-specific ===
+*.vs/
+*.dbmdl
+
+# === OS-specific ===
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# === Other ===
+# Uncomment if you use packages folder
+# packages/
+
+# Ignore user secrets if used
+secrets.json
