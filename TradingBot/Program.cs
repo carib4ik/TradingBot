@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json;
 using Telegram.Bot;
 using TradingBot.AppSettings;
 using TradingBot.Services;
