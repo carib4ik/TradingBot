@@ -40,14 +40,19 @@ public class MarketDataService
 
     public async Task<string> GetDataFromByBit(string symbol, string interval)
     {
-        
-            
         var chart = await _bybitClient.V5Api.ExchangeData.GetKlinesAsync(
             category: Category.Spot,         // Spot или Linear/Inverse для деривативов
             symbol: symbol,
             interval: interval.ToKlineInterval(),
             limit: CandlesLimit
         );
+        
+        // Логирование и защита от null
+        if (!chart.Success || chart.Data == null || chart.Data.List == null)
+        {
+            Console.WriteLine("Ошибка при получении данных с Bybit: " + chart.Error);
+            throw new Exception("Bybit API не вернул данные.");
+        }
         
         var jsonChart = JsonConvert.SerializeObject(chart.Data.List.Select(c => new {
             Time = c.StartTime.ToString("s"),
