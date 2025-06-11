@@ -35,7 +35,7 @@ public class StartState : ChatStateBase
 
     private async Task SendGreeting(long chatId)
     {
-        var greetings = "\ud83e\udd16 Crypto Insight Bot\nТвой помощник по аналитике рынка и экономики.\n\ud83d\udcca Задай вопрос — получи ответ от ИИ.\n\ud83d\udca1 Получай краткосрочные сделки по топовым криптомонетам.\n\ud83d\udcc8 Автооповещения о зонах перекупленности/перепроданности (RSI).";
+        const string greetings = "\ud83e\udd16 Crypto Insight Bot\nТвой помощник по аналитике рынка и экономики.\n\ud83d\udcca Задай вопрос — получи ответ от ИИ.\n\ud83d\udca1 Получай краткосрочные сделки по топовым криптомонетам.\n\ud83d\udcc8 Автооповещения о зонах перекупленности/перепроданности (RSI).";
         
         var askButton = InlineKeyboardButton.WithCallbackData("Задать вопрос ИИ", GlobalData.ASK);
         var marketDataButton = InlineKeyboardButton.WithCallbackData("Получить точку входа", GlobalData.MARKET_DATA);
@@ -45,6 +45,6 @@ public class StartState : ChatStateBase
         var keyboard = new InlineKeyboardMarkup([[askButton], [marketDataButton], [positionsButton], [rsiButton]]);
         
         await _botClient.SendMessage(chatId, greetings.EscapeMarkdownV2(), replyMarkup: keyboard, parseMode: ParseMode.MarkdownV2);
-        await _stateMachine.TransitTo<IdleState>(chatId);
+        await StateMachine.TransitTo<IdleState>(chatId);
     }
 }

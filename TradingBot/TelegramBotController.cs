@@ -12,7 +12,7 @@ public class TelegramBotController
 {
     private readonly ITelegramBotClient _botClient;
     private readonly ChatStateController _chatStateController;
-    private UsersDataProvider _usersDataProvider;
+    private readonly UsersDataProvider _usersDataProvider;
 
     public TelegramBotController(ITelegramBotClient telegramBotClient, ChatStateController chatStateController, UsersDataProvider usersDataProvider)
     {

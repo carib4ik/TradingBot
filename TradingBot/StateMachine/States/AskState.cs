@@ -29,14 +29,14 @@ public class AskState : ChatStateBase
         var answer = await _chatGptService.GetAnswerFromChatGpt(question);
         
         await _botClient.SendMessage(chatId, answer);
-        await _stateMachine.TransitTo<IdleState>(chatId);
+        await StateMachine.TransitTo<IdleState>(chatId);
     }
 
     public override async Task OnEnter(long chatId)
     {
         Console.WriteLine("AskState");
         
-        var response = "Пожалуйста введите свой вопрос. Ответ может занять некоторое время";
+        const string response = "Пожалуйста введите свой вопрос. Ответ может занять некоторое время";
         
         var backButton = InlineKeyboardButton.WithCallbackData("Назад", GlobalData.START);
         

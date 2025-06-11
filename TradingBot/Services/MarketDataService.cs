@@ -13,7 +13,7 @@ namespace TradingBot.Services;
 public class MarketDataService
 {
     private readonly BybitRestClient _bybitClient;
-    private const int CandlesLimit = 800;
+    private const int CANDLES_LIMIT = 800;
 
     public MarketDataService(string apiKey, string apiSecret)
     {
@@ -25,7 +25,7 @@ public class MarketDataService
     
     public async Task<string> GetDataFromBinance(string symbol, string interval)
     {
-        var url = $"https://api.binance.com/api/v3/klines?symbol={symbol}&interval={interval}&limit={CandlesLimit}";
+        var url = $"https://api.binance.com/api/v3/klines?symbol={symbol}&interval={interval}&limit={CANDLES_LIMIT}";
 
         Console.WriteLine("Get Market Data");
         
@@ -44,7 +44,7 @@ public class MarketDataService
             category: Category.Spot,         // Spot или Linear/Inverse для деривативов
             symbol: symbol,
             interval: interval.ToKlineInterval(),
-            limit: CandlesLimit
+            limit: CANDLES_LIMIT
         );
         
         // Логирование и защита от null

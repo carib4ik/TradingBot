@@ -1,11 +1,9 @@
-using Newtonsoft.Json;
-
 namespace TradingBot.AppSettings;
 
 public class AppConfig
 {
-    public string TelegramBotToken { get; set; }
-    public string BybitKey { get; set; }
-    public string BybitSecret { get; set; }
-    public string OpenAiKey { get; set; }
+    public string? TelegramBotToken { get; init; }
+    public string? BybitKey { get; init; }
+    public string? BybitSecret { get; init; }
+    public string? OpenAiKey { get; init; }
 }

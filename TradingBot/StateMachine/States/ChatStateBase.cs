@@ -4,11 +4,11 @@ namespace TradingBot.StateMachine.States;
 
 public abstract class ChatStateBase
 {
-    protected readonly ChatStateMachine _stateMachine;
+    protected readonly ChatStateMachine StateMachine;
 
     protected ChatStateBase(ChatStateMachine stateMachine)
     {
-        _stateMachine = stateMachine;
+        StateMachine = stateMachine;
     }
     
     public abstract Task HandleMessage(Message message);

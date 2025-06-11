@@ -10,18 +10,16 @@ public class RsiCheckerService : BackgroundService
     private readonly MarketDataService _marketDataService;
     private readonly TimeSpan _checkingInterval = TimeSpan.FromMinutes(30);
     private readonly UsersDataProvider _usersDataProvider;
-
     private readonly List<TokenData> _tokens;
-    private const string ChartInterval = "1h";
-    private const double MaxRsiAlert = 70;
-    private const double MinRsiAlert = 30;
+    private const string CHART_INTERVAL = "1h";
+    private const double MAX_RSI_ALERT = 70;
+    private const double MIN_RSI_ALERT = 30;
 
     public RsiCheckerService(ITelegramBotClient botClient, MarketDataService marketDataService, UsersDataProvider usersDataProvider)
     {
         _botClient = botClient;
         _marketDataService = marketDataService;
         _usersDataProvider = usersDataProvider;
-
         _tokens = LoadTokensList();
     }
 
@@ -35,18 +33,18 @@ public class RsiCheckerService : BackgroundService
             
             foreach (var token in _tokens)
             {
-                token.Rsi = await _marketDataService.GetCurrentRsi(token.Symbol, ChartInterval);
+                token.Rsi = await _marketDataService.GetCurrentRsi(token.Symbol, CHART_INTERVAL);
             }
 
             foreach (var token in _tokens)
             {
                 switch (token.Rsi)
                 {
-                    case >= MaxRsiAlert:
-                        alertMessage += $"\ud83d\udd34 SHORT\n{token.Symbol} ({ChartInterval}) RSI: {token.Rsi:F1}\n\n";
+                    case >= MAX_RSI_ALERT:
+                        alertMessage += $"\ud83d\udd34 SHORT\n{token.Symbol} ({CHART_INTERVAL}) RSI: {token.Rsi:F1}\n\n";
                         break;
-                    case <= MinRsiAlert:
-                        alertMessage += $"\ud83d\udfe2 LONG\n{token.Symbol} ({ChartInterval}) RSI: {token.Rsi:F1}\n\n";
+                    case <= MIN_RSI_ALERT:
+                        alertMessage += $"\ud83d\udfe2 LONG\n{token.Symbol} ({CHART_INTERVAL}) RSI: {token.Rsi:F1}\n\n";
                         break;
                 }
             }

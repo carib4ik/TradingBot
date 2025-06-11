@@ -2,8 +2,8 @@ using Newtonsoft.Json.Linq;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using TradingBot.Services;
-using TradingBot.StateMachine;
-using TradingBot.StateMachine.States;
+
+namespace TradingBot.StateMachine.States;
 
 public class TrackPositionsState : ChatStateBase
 {

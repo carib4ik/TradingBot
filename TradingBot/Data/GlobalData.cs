@@ -1,6 +1,6 @@
 namespace TradingBot.Data;
 
-public class GlobalData
+public static class GlobalData
 {
     public const string START = "/start";
     public const string ASK = "AskAI";
