@@ -48,10 +48,13 @@ public class RsiCheckerService : BackgroundService
                         break;
                 }
             }
-            
-            foreach (var chatId in _usersDataProvider.LoadChatIds())
+
+            if (alertMessage != "")
             {
-                await _botClient.SendMessage(chatId, alertMessage, cancellationToken: stoppingToken);
+                foreach (var chatId in _usersDataProvider.LoadChatIds())
+                {
+                    await _botClient.SendMessage(chatId, alertMessage, cancellationToken: stoppingToken);
+                }
             }
             
             await Task.Delay(_checkingInterval, stoppingToken);
