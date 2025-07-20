@@ -68,15 +68,6 @@ public class RsiCheckerService : BackgroundService
             new TokenData { Symbol = GlobalData.BTC },
             new TokenData { Symbol = GlobalData.ETH },
             new TokenData { Symbol = GlobalData.SOL },
-            new TokenData { Symbol = GlobalData.ADA },
-            new TokenData { Symbol = GlobalData.AVAX },
-            new TokenData { Symbol = GlobalData.LTC },
-            new TokenData { Symbol = GlobalData.TON },
-            new TokenData { Symbol = GlobalData.SUI },
-            new TokenData { Symbol = GlobalData.XRP },
-            new TokenData { Symbol = GlobalData.NEAR },
-            new TokenData { Symbol = GlobalData.AAVE },
-            new TokenData { Symbol = GlobalData.LINK },
         ];
     }
 }
