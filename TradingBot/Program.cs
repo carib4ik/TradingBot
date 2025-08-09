@@ -16,10 +16,8 @@ public static class Program
         var host = Host.CreateDefaultBuilder(args)
             .ConfigureServices((context, services) =>
             {
-                // Регистрируем конфиг
                 services.AddSingleton(config);
 
-                // Регистрация зависимостей через фабрики или напрямую
                 services.AddSingleton<ITelegramBotClient>(_ =>
                     new TelegramBotClient(config.TelegramBotToken));
 
@@ -38,7 +36,6 @@ public static class Program
             })
             .Build();
 
-        // Запуск бота
         var bot = host.Services.GetRequiredService<TelegramBotController>();
         bot.StartBot();
 
